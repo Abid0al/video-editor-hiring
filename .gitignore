@@ -1,0 +1,14 @@
+# Videos are too large for GitHub (3GB+) — host on YouTube/Vimeo/CDN instead
+videos/
+
+# Local env & secrets
+.env
+.env.local
+.env*.local
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/

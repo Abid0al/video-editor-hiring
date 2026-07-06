@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>High-end Video Editor — Join the Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:      #06030D;
+    --bg2:     #0B0716;
+    --card:    #110A20;
+    --card2:   #160E2A;
+    --line:    rgba(139, 92, 246, .16);
+    --line2:   rgba(139, 92, 246, .30);
+    --violet:  #7C5CFC;
+    --violet2: #9F7BFF;
+    --grad:    linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+    --white:   #F4F2FA;
+    --text:    #C9C4D6;
+    --muted:   #8B8699;
+    --display: 'Plus Jakarta Sans', sans-serif;
+    --body:    'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body.modal-open{overflow:hidden}
+  ::selection{background:var(--violet);color:#fff}
+  a{color:var(--white);text-decoration:none}
+  :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:6px}
+
+  /* ---- layout base: mobile-first ---- */
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+  section{padding:64px 0;position:relative}
+
+  /* ---------- scroll progress ---------- */
+  .playhead{
+    position:fixed;top:0;left:0;height:3px;width:0%;z-index:300;
+    background:var(--grad);
+  }
+
+  /* ---------- navbar ---------- */
+  .nav{
+    position:fixed;top:10px;left:50%;transform:translateX(-50%);
+    z-index:200;width:min(1100px, calc(100% - 24px));
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 10px 8px 16px;border-radius:14px;
+    background:rgba(11,7,22,.82);border:1px solid var(--line);
+    backdrop-filter:blur(14px);
+  }
+  .nav .brand{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--display);font-weight:700;font-size:14px;color:var(--white);
+  }
+  .nav .brand .dot{
+    width:28px;height:28px;border-radius:8px;background:var(--grad);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .nav .brand .dot svg{width:14px;height:14px;fill:#fff}
+  .nav .links{display:none;gap:28px;font-size:14px;color:var(--muted)}
+  .nav .links a{color:var(--muted);transition:color .2s}
+  .nav .links a:hover{color:var(--white)}
+  .nav .cta{padding:8px 14px;font-size:13px}
+
+  /* ---------- shared bits ---------- */
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 12px;border-radius:999px;
+    border:1px solid var(--line2);background:rgba(124,92,252,.08);
+    font-size:11.5px;font-weight:500;color:var(--violet2);
+    letter-spacing:.02em;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .pill::before{content:"✦";font-size:10px}
+  .sectionhead{text-align:center;max-width:640px;margin:0 auto 40px}
+  .sectionhead .pill{margin-bottom:16px}
+  h2{
+    font-family:var(--display);font-weight:700;
+    font-size:clamp(24px,5vw,42px);line-height:1.15;
+    color:var(--white);margin-bottom:12px;letter-spacing:-.01em;
+  }
+  .lede{color:var(--muted);font-size:15px}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    font-family:var(--display);font-weight:600;font-size:14px;
+    padding:13px 22px;border-radius:12px;cursor:pointer;
+    border:1px solid var(--line2);color:var(--text);background:transparent;
+    transition:all .2s;
+  }
+  .btn:hover{border-color:var(--violet);color:var(--white)}
+  .btn.primary{
+    background:var(--grad);border-color:transparent;color:#fff;
+    box-shadow:0 0 24px rgba(124,92,252,.35);
+  }
+  .btn.primary:hover:not(:disabled){
+    box-shadow:0 0 38px rgba(124,92,252,.55);transform:translateY(-1px);
+  }
+  .btn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+
+  /* ---------- hero ---------- */
+  .hero{
+    text-align:center;padding:110px 0 56px;position:relative;overflow-x:clip;
+  }
+  .hero::before{
+    content:"";position:absolute;top:-160px;left:50%;transform:translateX(-50%);
+    width:min(900px,100vw);height:500px;pointer-events:none;
+    background:radial-gradient(ellipse 50% 45% at 50% 40%, rgba(124,92,252,.28), transparent 70%);
+  }
+  .hero::after{
+    content:"";position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);
+    width:100vw;height:180px;pointer-events:none;
+    background:radial-gradient(ellipse 50% 100% at 50% 100%, rgba(124,92,252,.14), transparent 70%);
+  }
+  .hero .pill{margin-bottom:18px}
+  h1{
+    font-family:var(--display);font-weight:800;letter-spacing:-.02em;
+    font-size:clamp(32px,9vw,72px);line-height:1.08;color:var(--white);
+    max-width:17ch;margin:0 auto;
+  }
+  h1 .grad{
+    background:linear-gradient(120deg,#B79CFF 0%, #7C5CFC 60%, #A78BFA 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.sub{
+    margin:18px auto 0;max-width:56ch;color:var(--muted);font-size:15px;
+  }
+  .hero .heroctas{margin-top:26px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+  .hero .heroctas .btn{width:100%;justify-content:center}
+
+  /* ---------- software strip ---------- */
+  .softstrip{
+    scroll-margin-top:80px;
+    margin:44px auto 0;max-width:1000px;
+    display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+    position:relative;z-index:2;
+  }
+  /* span orphan card full-width only in the 2-col mobile grid */
+  .soft{
+    background:linear-gradient(180deg, var(--card2), var(--card));
+    border:1px solid var(--line);border-radius:14px;
+    padding:18px 14px 14px;text-align:center;
+    transition:border-color .25s, transform .25s, box-shadow .25s;
+  }
+  .soft:hover{
+    border-color:var(--line2);transform:translateY(-4px);
+    box-shadow:0 12px 32px rgba(124,92,252,.12);
+  }
+  .soft .ic{
+    width:40px;height:40px;margin:0 auto 10px;border-radius:10px;
+    border:1px solid var(--line2);background:rgba(124,92,252,.1);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .soft .ic svg{width:20px;height:20px;fill:var(--violet2)}
+  .soft .ic.brand{backdrop-filter:blur(6px)}
+  .soft .ic.brand img{width:22px;height:22px;border-radius:5px;display:block}
+  .soft h3{
+    font-family:var(--display);font-weight:600;font-size:13px;
+    color:var(--white);line-height:1.3;
+  }
+  .soft span{font-size:11px;color:var(--muted)}
+
+  /* ---------- video showcase ---------- */
+  .vglow{position:relative}
+  .vglow::before{
+    content:"";position:absolute;top:40px;left:50%;transform:translateX(-50%);
+    width:min(760px,100vw);height:400px;pointer-events:none;
+    background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(124,92,252,.16), transparent 70%);
+  }
+  .vgrid{display:grid;grid-template-columns:1fr;gap:18px;position:relative;z-index:2}
+  .vcard{grid-column:span 1}
+  .vcard.wide{grid-column:1 / -1}
+  .player{
+    position:relative;width:100%;aspect-ratio:16/9;
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(124,92,252,.06);
+  }
+  .shield{position:absolute;inset:0;cursor:pointer;background:transparent;border:0;padding:0}
+  .bigplay{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;transition:opacity .25s;
+  }
+  .bigplay .ring{
+    width:64px;height:64px;border-radius:50%;
+    background:var(--grad);box-shadow:0 0 32px rgba(124,92,252,.5);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .bigplay svg{width:22px;height:22px;fill:#fff;margin-left:3px}
+  .player.playing .bigplay{opacity:0}
+  .vbar{
+    position:absolute;left:0;right:0;bottom:0;z-index:3;
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;
+    background:linear-gradient(to top, rgba(6,3,13,.92), transparent);
+    opacity:1;transition:opacity .2s; /* always visible on touch */
+  }
+  @media (hover:hover){
+    .vbar{opacity:0}
+    .player:hover .vbar,.player:focus-within .vbar,.player.paused-once .vbar{opacity:1}
+  }
+  .vbar button{background:none;border:0;cursor:pointer;padding:4px;line-height:0}
+  .vbar svg{width:18px;height:18px;fill:var(--text)}
+  .vbar button:hover svg{fill:#fff}
+  .seek{flex:1;height:20px;display:flex;align-items:center;cursor:pointer}
+  .seek .rail{width:100%;height:4px;background:rgba(139,92,246,.2);border-radius:3px;overflow:hidden}
+  .seek .fill{height:100%;width:0%;background:var(--grad)}
+  .vtime{font-size:11px;color:var(--muted);min-width:70px;text-align:right;font-variant-numeric:tabular-nums}
+  .vtitle{margin-top:10px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .vtitle h3{font-family:var(--display);font-weight:600;font-size:14px;color:var(--white)}
+  .vtitle span{font-size:12px;color:var(--violet2)}
+  .vempty{
+    position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;
+    align-items:center;justify-content:center;color:var(--muted);
+    font-size:13px;letter-spacing:.04em;
+  }
+  .vempty .ic{
+    width:52px;height:52px;border-radius:14px;border:1px solid var(--line2);
+    background:rgba(124,92,252,.08);display:flex;align-items:center;justify-content:center;
+  }
+  .vempty svg{width:24px;height:24px;fill:var(--violet2)}
+
+  /* ---------- confidence gate + apply ---------- */
+  .gate{
+    max-width:760px;margin:0 auto;text-align:center;
+    background:linear-gradient(180deg, var(--card2), var(--card));
+    border:1px solid var(--line);border-radius:18px;
+    padding:28px 20px;position:relative;overflow:hidden;
+  }
+  .gate::before{
+    content:"";position:absolute;top:-120px;left:50%;transform:translateX(-50%);
+    width:500px;height:260px;pointer-events:none;
+    background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(124,92,252,.22), transparent 70%);
+  }
+  .gate > *{position:relative;z-index:1}
+  .gate h2{font-size:clamp(22px,4vw,34px)}
+  .gate .lede{margin-bottom:22px}
+  .gatecheck{
+    display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;
+    font-size:15px;color:var(--white);line-height:1.55;
+    background:var(--bg2);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin-bottom:22px;transition:border-color .2s;
+  }
+  .gatecheck:hover{border-color:var(--line2)}
+  .gatecheck:has(input:checked){border-color:var(--violet);box-shadow:0 0 20px rgba(124,92,252,.15)}
+  .gatecheck input{
+    width:19px;height:19px;margin-top:3px;accent-color:var(--violet);flex-shrink:0;cursor:pointer;
+  }
+  .gatecheck .sub{display:block;font-size:12.5px;color:var(--muted);margin-top:5px;font-weight:400}
+
+  footer{
+    border-top:1px solid var(--line);padding:28px 0 36px;
+    font-size:13px;color:var(--muted);
+  }
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  /* ---------- modal: bottom-sheet on mobile ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:400;display:none;
+    align-items:flex-end;justify-content:center;
+    background:rgba(6,3,13,.82);backdrop-filter:blur(8px);
+  }
+  .overlay.open{display:flex}
+  .modal{
+    width:100%;max-width:660px;max-height:92dvh;max-height:92vh;display:flex;flex-direction:column;
+    background:linear-gradient(180deg, var(--card2), var(--card));
+    border:1px solid var(--line2);border-radius:20px 20px 0 0;
+    overflow:hidden;box-shadow:0 -20px 60px rgba(0,0,0,.5),0 0 40px rgba(124,92,252,.1);
+  }
+  .modalhead{padding:18px 18px 0;flex-shrink:0}
+  .modalhead .row{display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .modalhead h3{
+    font-family:var(--display);font-weight:700;font-size:18px;color:var(--white);
+  }
+  .mclose{
+    background:rgba(124,92,252,.08);border:1px solid var(--line);
+    border-radius:10px;width:34px;height:34px;
+    cursor:pointer;color:var(--muted);font-size:19px;line-height:1;
+  }
+  .mclose:hover{color:var(--white);border-color:var(--line2)}
+  .steps{display:flex;gap:8px;margin:14px 0 0}
+  .steps .seg{flex:1;height:4px;border-radius:3px;background:rgba(139,92,246,.15)}
+  .steps .seg.done{background:rgba(124,92,252,.55)}
+  .steps .seg.active{background:var(--grad)}
+  .steplabel{font-size:12px;color:var(--violet2);margin:10px 0 4px;font-weight:500}
+  .modalbody{padding:14px 18px 22px;overflow-y:auto;flex:1}
+  .modalbody::-webkit-scrollbar{width:6px}
+  .modalbody::-webkit-scrollbar-thumb{background:rgba(124,92,252,.3);border-radius:4px}
+  .mstep{display:none}
+  .mstep.active{display:block}
+  .q{margin-bottom:22px}
+  .q > label.qlabel, .q .qlabel{
+    display:block;font-family:var(--display);font-weight:600;font-size:14.5px;
+    color:var(--white);margin-bottom:7px;line-height:1.4;
+  }
+  .q .hint{font-size:13px;color:var(--muted);margin-bottom:10px;max-width:62ch}
+  .req{color:var(--violet2)}
+  input[type=text],input[type=email],textarea{
+    width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    color:var(--white);font-family:var(--body);font-size:16px; /* 16px prevents iOS zoom-on-focus */
+    padding:13px 16px;transition:border-color .2s, box-shadow .2s;
+  }
+  input[type=text]:focus,input[type=email]:focus,textarea:focus{
+    outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,252,.15);
+  }
+  input::placeholder,textarea::placeholder{color:var(--muted)}
+  textarea{min-height:100px;resize:vertical}
+  .choices{display:flex;flex-direction:column;gap:8px}
+  .choices.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(140px,100%),1fr));gap:8px}
+  .choice{
+    display:flex;align-items:flex-start;gap:11px;
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:11px 14px;cursor:pointer;transition:all .15s;
+    font-size:14px;color:var(--text);line-height:1.45;
+  }
+  .choice:hover{border-color:var(--line2)}
+  .choice input{margin-top:3px;accent-color:var(--violet);width:15px;height:15px;flex-shrink:0}
+  .choice:has(input:checked){
+    border-color:var(--violet);background:rgba(124,92,252,.1);color:var(--white);
+  }
+  .notebox{
+    margin-top:10px;border:1px solid var(--line2);border-radius:10px;
+    padding:10px 14px;font-size:13px;color:var(--violet2);background:rgba(124,92,252,.06);
+  }
+  .phone-row{display:flex;gap:8px}
+  .phone-row select{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    color:var(--white);font-family:var(--body);font-size:16px;
+    padding:13px 10px;cursor:pointer;transition:border-color .2s,box-shadow .2s;
+    flex-shrink:0;width:110px;
+  }
+  .phone-row select:focus{
+    outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,92,252,.15);
+  }
+  .phone-row select option{background:var(--card)}
+  .phone-row input{flex:1}
+  fieldset{border:0}
+  .modalfoot{
+    flex-shrink:0;padding:14px 18px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .modalfoot .btn{padding:12px 20px;font-size:13.5px;flex:1}
+  #applybtn{width:100%;padding:14px 22px}
+  .formmsg{
+    display:none;margin:0 18px 14px;padding:12px 16px;border-radius:12px;
+    font-size:13.5px;border:1px solid var(--line2);color:var(--white);
+    background:rgba(124,92,252,.1);
+  }
+  .formmsg.show{display:block}
+  .formmsg.error{border-color:rgba(248,113,113,.4);background:rgba(127,29,29,.25);color:#fca5a5}
+  .msuccess{display:none;text-align:center;padding:36px 16px}
+  .msuccess.show{display:block}
+  .msuccess .ring{
+    width:64px;height:64px;border-radius:50%;background:var(--grad);
+    box-shadow:0 0 40px rgba(124,92,252,.4);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  }
+  .msuccess svg{width:28px;height:28px;fill:#fff}
+  .msuccess h3{font-family:var(--display);font-weight:700;font-size:20px;color:var(--white);margin-bottom:10px}
+  .msuccess p{color:var(--muted);max-width:44ch;margin:0 auto}
+
+  /* ---------- modal & form animations ---------- */
+  @media(prefers-reduced-motion:no-preference){
+    @keyframes modal-up{
+      from{opacity:0;transform:translateY(36px)}
+      to  {opacity:1;transform:none}
+    }
+    @keyframes step-in{
+      from{opacity:0;transform:translateY(14px)}
+      to  {opacity:1;transform:none}
+    }
+    .overlay.open .modal{
+      animation:modal-up .38s cubic-bezier(.4,0,.2,1) both;
+    }
+    .mstep.active .q,
+    .mstep.active fieldset{
+      animation:step-in .38s cubic-bezier(.4,0,.2,1) both;
+    }
+    .mstep.active .q:nth-child(1),.mstep.active fieldset:nth-child(1){animation-delay:  40ms}
+    .mstep.active .q:nth-child(2),.mstep.active fieldset:nth-child(2){animation-delay: 100ms}
+    .mstep.active .q:nth-child(3),.mstep.active fieldset:nth-child(3){animation-delay: 160ms}
+    .mstep.active .q:nth-child(4),.mstep.active fieldset:nth-child(4){animation-delay: 220ms}
+  }
+
+  /* ---------- scroll reveal ---------- */
+  .sr{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1);
+    transition-delay:var(--sr-d,0ms);
+  }
+  .sr.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.sr{opacity:1;transform:none;transition:none}}
+
+  @media (max-width:599px){
+    .soft:last-child:nth-child(odd){grid-column:1/-1}
+  }
+
+  /* ============ min-width breakpoints (scale up from mobile) ============ */
+
+  @media (min-width:480px){
+    .hero .heroctas{flex-direction:row;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+    .hero .heroctas .btn{width:auto}
+    #applybtn{width:auto;padding:16px 36px}
+    .modalfoot .btn{flex:none}
+  }
+
+  @media (min-width:600px){
+    .wrap{padding:0 24px}
+    .nav{top:14px;padding:9px 12px 9px 20px}
+    .nav .brand{font-size:16px}
+    .nav .cta{padding:10px 20px;font-size:13.5px}
+    .hero p.sub{font-size:16px}
+    .softstrip{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:56px}
+  }
+
+  @media (min-width:640px){
+    .vgrid{grid-template-columns:1fr 1fr;gap:22px}
+    .player{border-radius:18px}
+    .bigplay .ring{width:74px;height:74px}
+    .bigplay svg{width:26px;height:26px;margin-left:4px}
+    .gate{padding:clamp(28px,5vw,56px);border-radius:22px}
+    .overlay{align-items:center;padding:20px}
+    .modal{border-radius:24px;max-height:90vh}
+    .modalhead{padding:24px 28px 0}
+    .modalhead h3{font-size:20px}
+    .modalbody{padding:16px 28px 26px}
+    .modalfoot{padding:16px 28px;flex-wrap:nowrap}
+    .formmsg{margin:0 28px 16px}
+  }
+
+  @media (min-width:900px){
+    .nav .links{display:flex}
+    section{padding:110px 0}
+    .hero{padding:190px 0 90px}
+    .hero .pill{margin-bottom:26px}
+    h1{font-size:clamp(40px,6.5vw,72px);line-height:1.06}
+    .hero p.sub{font-size:16.5px;margin-top:24px}
+    .hero .heroctas{margin-top:36px;gap:14px}
+    .sectionhead{margin-bottom:56px}
+    .sectionhead .pill{margin-bottom:20px}
+    .lede{font-size:15.5px}
+    .softstrip{grid-template-columns:repeat(5,1fr);gap:14px;margin-top:72px}
+    .soft{padding:24px 18px 20px;border-radius:16px}
+    .soft h3{font-size:14.5px}
+    .soft span{font-size:11.5px}
+    .vgrid{gap:26px}
+    .player{border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(124,92,252,.06)}
+    .bigplay .ring{width:82px;height:82px}
+    .bigplay svg{width:28px;height:28px;margin-left:4px}
+    .vtitle h3{font-size:16px}
+    .vtitle{margin-top:14px}
+    .gate{border-radius:24px}
+    .modalhead{padding:26px 30px 0}
+    .modalhead h3{font-size:21px}
+    .modalbody{padding:18px 30px 28px}
+    .modalfoot{padding:18px 30px}
+    .formmsg{margin:0 30px 16px}
+    footer{padding:36px 0 44px}
+  }
+</style>
+</head>
+<body>
+
+<div class="playhead" id="playhead"></div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="nav">
+  <a class="brand" href="#">
+    <span class="dot"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+    Editor&nbsp;Role
+  </a>
+  <div class="links">
+    <a href="#requirements">Requirements</a>
+    <a href="#work">Reference</a>  
+  </div>
+  <a class="btn primary cta" href="#apply">Apply now</a>
+</nav>
+
+<!-- ================= HERO + SOFTWARE ================= -->
+<header class="hero">
+  <div class="wrap">
+    <span class="pill">Open role · Remote · Long-term</span>
+    <h1>High-end <span class="grad">Video Editor</span> for a Growing Team</h1>
+    <p class="sub">We produce educational YouTube videos for software, AI, and SaaS companies.
+       Watch the reference below — if you can cut at this level, we want your application.</p>
+    <div class="heroctas">
+      <a class="btn primary" href="#apply">Send your application</a>
+      <a class="btn" href="#work">Watch the reference</a>
+    </div>
+
+    <div class="softstrip" id="requirements" aria-label="Required software and skills">
+      <div class="soft">
+        <span class="ic brand"><img src="assets/premiere-pro.svg" alt="Adobe Premiere Pro logo"></span>
+        <h3>Premiere Pro</h3>
+      </div>
+      <div class="soft">
+        <span class="ic brand"><img src="assets/after-effects.svg" alt="Adobe After Effects logo"></span>
+        <h3>After Effects</h3>
+      </div>
+      <div class="soft">
+        <span class="ic brand"><img src="assets/audition.svg" alt="Adobe Audition logo"></span>
+        <h3>Audition</h3>
+      </div>
+      <div class="soft">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm2.2 9.6h1.6v-2.2h2.1v2.2h1.6V8.4h-1.6v2.5H7.8V8.4H6.2zm9.9.2q1.2 0 1.9-.9.7-.9.7-2.4t-.7-2.4q-.7-.9-1.9-.9h-2.6v6.6zm-1-1.4V9.8h.9q.6 0 .9.5.4.5.4 1.5t-.4 1.4q-.3.5-.9.5z" fill-rule="evenodd"/></svg></span>
+        <h3>4K Render</h3>
+      </div>
+      <div class="soft">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v2.1a7 7 0 0 1 5.9 5.9H21a1 1 0 1 1 0 2h-2.1a7 7 0 0 1-5.9 5.9V21a1 1 0 1 1-2 0v-2.1A7 7 0 0 1 5.1 13H3a1 1 0 1 1 0-2h2.1A7 7 0 0 1 11 5.1V3a1 1 0 0 1 1-1zm0 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg></span>
+        <h3>Motion Graphics</h3>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= VIDEO SHOWCASE ================= -->
+<section id="work" class="vglow">
+  <div class="wrap">
+    <div class="sectionhead">
+      <span class="pill">The reference</span>
+      <h2>This Is the Bar</h2>
+      <p class="lede">Study the pacing, the motion graphics, the audio mix. Your work will be measured against this.</p>
+    </div>
+    <div class="vgrid" id="vgrid"><!-- players injected by script --></div>
+  </div>
+</section>
+
+<!-- ================= CONFIDENCE GATE + APPLY ================= -->
+<section id="apply">
+  <div class="wrap">
+    <div class="gate">
+      <span class="pill" style="margin-bottom:18px">Your move</span>
+      <h2>Ready to Prove It?</h2>
+      <p class="lede">One honest checkbox stands between you and the application.</p>
+      <label class="gatecheck">
+        <input type="checkbox" id="confidence">
+        <span>
+          I've watched the reference video and I'm confident I can match its style and quality.
+          <span class="sub">Checking this activates the application. We'll hold you to it in the trial edit.</span>
+        </span>
+      </label>
+      <button class="btn primary" id="applybtn" disabled>Send your application
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.4 1.4L16.2 11H4v2h12.2l-5.6 5.6L12 20l8-8z"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>High-end video editor · Open role</span>
+    <span>Cut with care</span>
+  </div>
+</footer>
+
+<!-- ================= APPLICATION MODAL ================= -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="modal">
+    <div class="modalhead">
+      <div class="row">
+        <h3 id="mtitle">Video editor application</h3>
+        <button class="mclose" id="mclose" aria-label="Close">&times;</button>
+      </div>
+      <div class="steps" aria-hidden="true">
+        <div class="seg" data-seg="0"></div>
+        <div class="seg" data-seg="1"></div>
+        <div class="seg" data-seg="2"></div>
+      </div>
+      <p class="steplabel" id="steplabel">Step 1 of 3 · About you</p>
+    </div>
+
+    <form id="appform" class="modalbody" novalidate>
+
+      <!-- ============ STEP 1 : About you (Q1–Q4) ============ -->
+      <div class="mstep active" data-step="0">
+        <div class="q">
+          <label class="qlabel" for="f-name">1. Full name <span class="req">*</span></label>
+          <input type="text" id="f-name" name="full_name" required autocomplete="name" placeholder="Your full name">
+        </div>
+        <div class="q">
+          <label class="qlabel" for="f-email">2. Email address <span class="req">*</span></label>
+          <input type="email" id="f-email" name="email" required autocomplete="email" placeholder="you@example.com">
+        </div>
+        <div class="q">
+          <label class="qlabel" for="f-phone">3. WhatsApp number <span class="req">*</span></label>
+          <div class="phone-row">
+            <select id="f-country" name="country_code" required>
+              <option value="">Code</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+1-CA">🇨🇦 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+92">🇵🇰 +92</option>
+              <option value="+880">🇧🇩 +880</option>
+              <option value="+63">🇵🇭 +63</option>
+              <option value="+62">🇮🇩 +62</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+20">🇪🇬 +20</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+56">🇨🇱 +56</option>
+              <option value="+51">🇵🇪 +51</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+31">🇳🇱 +31</option>
+              <option value="+46">🇸🇪 +46</option>
+              <option value="+47">🇳🇴 +47</option>
+              <option value="+45">🇩🇰 +45</option>
+              <option value="+358">🇫🇮 +358</option>
+              <option value="+48">🇵🇱 +48</option>
+              <option value="+380">🇺🇦 +380</option>
+              <option value="+7">🇷🇺 +7</option>
+              <option value="+90">🇹🇷 +90</option>
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+98">🇮🇷 +98</option>
+              <option value="+964">🇮🇶 +964</option>
+              <option value="+86">🇨🇳 +86</option>
+              <option value="+81">🇯🇵 +81</option>
+              <option value="+82">🇰🇷 +82</option>
+              <option value="+84">🇻🇳 +84</option>
+              <option value="+66">🇹🇭 +66</option>
+              <option value="+60">🇲🇾 +60</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+94">🇱🇰 +94</option>
+              <option value="+977">🇳🇵 +977</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+64">🇳🇿 +64</option>
+            </select>
+            <input type="tel" id="f-phone" name="whatsapp" required autocomplete="tel" placeholder="WhatsApp number">
+          </div>
+        </div>
+        <fieldset class="q">
+          <legend class="qlabel">4. How long have you been working as a video editor? <span class="req">*</span></legend>
+          <div class="choices cols">
+            <label class="choice"><input type="radio" name="experience" value="Less than 1 year" required> Less than 1 year</label>
+            <label class="choice"><input type="radio" name="experience" value="1–2 years"> 1–2 years</label>
+            <label class="choice"><input type="radio" name="experience" value="2–4 years"> 2–4 years</label>
+            <label class="choice"><input type="radio" name="experience" value="4+ years"> 4+ years</label>
+          </div>
+        </fieldset>
+        <div class="q">
+          <label class="qlabel" for="f-portfolio">5. Portfolio <span class="req">*</span></label>
+          <p class="hint">Google Drive, YouTube, Vimeo, Behance, or a personal website.</p>
+          <input type="text" id="f-portfolio" name="portfolio" required placeholder="https://">
+        </div>
+      </div>
+
+      <!-- ============ STEP 2 : Skills & fit (Q6–Q9) ============ -->
+      <div class="mstep" data-step="1">
+        <fieldset class="q">
+          <legend class="qlabel">6. Which software are you proficient in? <span class="req">*</span></legend>
+          <div class="choices cols" id="software-group">
+            <label class="choice"><input type="checkbox" name="software" value="Adobe Premiere Pro"> Adobe Premiere Pro</label>
+            <label class="choice"><input type="checkbox" name="software" value="Adobe After Effects"> Adobe After Effects</label>
+            <label class="choice"><input type="checkbox" name="software" value="Adobe Photoshop"> Adobe Photoshop</label>
+            <label class="choice"><input type="checkbox" name="software" value="Adobe Audition"> Adobe Audition</label>
+            <label class="choice"><input type="checkbox" name="software" value="DaVinci Resolve"> DaVinci Resolve</label>
+            <label class="choice"><input type="checkbox" name="software" value="CapCut"> CapCut</label>
+            <label class="choice"><input type="checkbox" name="software" value="Other"> Other</label>
+          </div>
+        </fieldset>
+        <fieldset class="q">
+          <legend class="qlabel">7. Do you meet all of the following requirements? <span class="req">*</span></legend>
+          <p class="hint">Confirm you are confident performing each task. These are the minimum requirements for this role.</p>
+          <div class="choices" id="requirements-group">
+            <label class="choice"><input type="checkbox" name="req" value="4K YouTube editing"> Edit professional 4K YouTube videos</label>
+            <label class="choice"><input type="checkbox" name="req" value="Motion graphics & text animation"> Create motion graphics and text animations</label>
+            <label class="choice"><input type="checkbox" name="req" value="Audio editing & enhancement"> Edit and enhance audio professionally</label>
+            <label class="choice"><input type="checkbox" name="req" value="Color correction & grading"> Perform color correction and color grading</label>
+            <label class="choice"><input type="checkbox" name="req" value="Screencasts"> Create professional screencasts / screen recordings</label>
+            <label class="choice"><input type="checkbox" name="req" value="Two-camera editing"> Edit two-camera footage</label>
+            <label class="choice"><input type="checkbox" name="req" value="4K H.264 export"> Export videos using proper 4K settings (H.264)</label>
+            <label class="choice"><input type="checkbox" name="req" value="Follows SOPs"> Follow detailed SOPs and editing style guides</label>
+            <label class="choice"><input type="checkbox" name="req" value="Premiere Pro proficiency"> Use Adobe Premiere Pro proficiently</label>
+            <label class="choice"><input type="checkbox" name="req" value="After Effects proficiency"> Use Adobe After Effects for animations and motion graphics</label>
+          </div>
+          <p class="notebox">This role requires proficiency in all of the above.</p>
+        </fieldset>
+        <fieldset class="q">
+          <legend class="qlabel">8. Are you comfortable editing to match reference styles and implementing feedback until the final edit meets our quality standards? <span class="req">*</span></legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="feedback" value="Yes, absolutely." required> Yes, absolutely.</label>
+            <label class="choice"><input type="radio" name="feedback" value="Yes, within reason."> Yes, within reason.</label>
+            <label class="choice"><input type="radio" name="feedback" value="No."> No.</label>
+          </div>
+        </fieldset>
+        <div class="q">
+          <label class="qlabel" for="f-rate">9. What is your expected fixed rate for editing one YouTube video? <span class="req">*</span></label>
+          <p class="hint">Videos run 6–20 minutes final length. Fixed price per video in USD, not hourly. Example: ₹1000 per video.</p>
+          <input type="text" id="f-rate" name="rate" required placeholder="₹— per video">
+        </div>
+      </div>
+
+      <!-- ============ STEP 3 : Commitment (Q10–Q12) ============ -->
+      <div class="mstep" data-step="2">
+        <fieldset class="q">
+          <legend class="qlabel">10. Are you willing to complete a 1-minute free trial edit as part of our hiring process? <span class="req">*</span></legend>
+          <div class="choices cols">
+            <label class="choice"><input type="radio" name="trial" value="Yes" required> Yes</label>
+            <label class="choice"><input type="radio" name="trial" value="No"> No</label>
+          </div>
+        </fieldset>
+        <div class="q">
+          <label class="qlabel" for="f-why">11. Why would you like to join our team? <span class="req">*</span></label>
+          <textarea id="f-why" name="why_join" required placeholder="A few honest sentences beat a page of buzzwords."></textarea>
+        </div>
+        <div class="q">
+          <label class="qlabel" for="f-else">12. Is there anything else you'd like us to know?</label>
+          <textarea id="f-else" name="anything_else" placeholder="Optional"></textarea>
+        </div>
+      </div>
+
+      <!-- success screen -->
+      <div class="msuccess" id="msuccess">
+        <div class="ring"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+        <h3>Application received</h3>
+        <p>Thank you! If you're shortlisted, we'll email you about the trial edit and interview.</p>
+      </div>
+    </form>
+
+    <div class="formmsg" id="formmsg" role="status"></div>
+
+    <div class="modalfoot" id="modalfoot">
+      <button type="button" class="btn" id="backbtn" style="visibility:hidden">Back</button>
+      <button type="button" class="btn primary" id="nextbtn">Next</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURATION — the only two things you need to edit
+   ===================================================================== */
+
+/* 1) SAMPLE / REFERENCE VIDEOS
+   Point src to the local video file path relative to this HTML file.
+   Leave src as "" to show a "coming soon" placeholder.
+   The four videos render in a 2x2 grid. */
+const VIDEOS = [
+  { src: "videos/reference-01.mp4", title: "Best AI Note Taker 2026: Krisp vs Otter, Fireflies & Fathom",       label: "Reference 01" },
+  { src: "videos/reference-02.mp4", title: "Jira vs Notion: The Honest Comparison (Pricing, AI & Workflow)",    label: "Reference 02" },
+  { src: "videos/reference-03.mp4", title: "monday.com vs Asana vs ClickUp: Which AI Work Platform Wins?",      label: "Reference 03" },
+  { src: "videos/reference-04.mp4", title: "Rovo Tutorial: AI Search, Chat & Agents for Jira Teams",           label: "Reference 04" },
+];
+
+/* 2) FORM ENDPOINT
+   Deploy sheets-endpoint.gs as a Google Apps Script Web App, then paste
+   the generated URL here, e.g. "https://script.google.com/macros/s/.../exec".
+   See sheets-endpoint.gs for the full 3-minute setup guide.
+   While this is empty, submissions are validated but not sent anywhere.  */
+const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbz-GwjmxKCwztyvkihIH8jWXpczxE0WYIKoldR8CZcy4aYEiTeXaX5bkhsbI2EKS2KcrA/exec";
+
+/* ===================================================================== */
+
+/* ---------- scroll progress ---------- */
+const playhead = document.getElementById('playhead');
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  playhead.style.width = (p * 100) + '%';
+}, { passive: true });
+
+/* ---------- custom chromeless YouTube players ----------
+   The iframe has pointer-events:none and a transparent "shield" on top,
+   so the YouTube logo, title, and suggestions are never clickable.
+   All control happens through our own UI via the IFrame API.            */
+const ICON_PLAY  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+const ICON_MUTE  = '<svg viewBox="0 0 24 24"><path d="M7 9v6h4l5 5V4l-5 5H7z"/></svg>';
+const ICON_MUTED = '<svg viewBox="0 0 24 24"><path d="M7 9v6h4l5 5V4l-5 5H7z" opacity=".35"/><path d="M3 3l18 18-1.4 1.4L1.6 4.4z"/></svg>';
+const ICON_FS    = '<svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5V5zm9 0h5v5h-2V7h-3V5zM5 14h2v3h3v2H5v-5zm12 0h2v5h-5v-2h3v-3z"/></svg>';
+
+const vgrid = document.getElementById('vgrid');
+
+VIDEOS.forEach((v, i) => {
+  const card = document.createElement('div');
+  card.className = 'vcard';
+  card.innerHTML = `
+    <div class="player" id="player-${i}">
+      ${v.src ? `
+        <video id="vid-${i}" src="${v.src}" playsinline muted autoplay preload="auto"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+        <button class="shield" aria-label="Play or pause ${v.title}"></button>
+        <div class="bigplay"><span class="ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <div class="vbar">
+          <button class="pp" aria-label="Play/Pause">${ICON_PLAY}</button>
+          <div class="seek" role="slider" aria-label="Seek" tabindex="0"><div class="rail"><div class="fill"></div></div></div>
+          <span class="vtime">0:00 / 0:00</span>
+          <button class="mute" aria-label="Mute/Unmute">${ICON_MUTED}</button>
+          <button class="fs" aria-label="Fullscreen">${ICON_FS}</button>
+        </div>` : `
+        <div class="vempty">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></span>
+          <span>Reference video coming soon</span>
+        </div>`}
+    </div>
+    `;
+  vgrid.appendChild(card);
+});
+
+function fmt(s) {
+  s = Math.max(0, Math.floor(s || 0));
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
+const players = [];
+
+VIDEOS.forEach((v, i) => {
+  if (!v.src) return;
+  const root  = document.getElementById('player-' + i);
+  const vid   = document.getElementById('vid-' + i);
+  const pp    = root.querySelector('.pp');
+  const mute  = root.querySelector('.mute');
+  const seek  = root.querySelector('.seek');
+  const fill  = root.querySelector('.fill');
+  const time  = root.querySelector('.vtime');
+
+  players.push({ vid, root, i });
+
+  const syncPlay = () => {
+    const playing = !vid.paused;
+    root.classList.toggle('playing', playing);
+    if (!vid.paused) root.classList.add('paused-once');
+    pp.innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+  };
+  vid.addEventListener('play',  syncPlay);
+  vid.addEventListener('pause', syncPlay);
+
+  const toggle = () => {
+    players.forEach(p => { if (p.i !== i && !p.vid.paused) p.vid.pause(); });
+    vid.paused ? vid.play() : vid.pause();
+    if (vid.muted) { vid.muted = false; mute.innerHTML = ICON_MUTE; }
+  };
+  root.querySelector('.shield').addEventListener('click', toggle);
+  pp.addEventListener('click', toggle);
+
+  mute.addEventListener('click', () => {
+    vid.muted = !vid.muted;
+    mute.innerHTML = vid.muted ? ICON_MUTED : ICON_MUTE;
+  });
+
+  root.querySelector('.fs').addEventListener('click', () => {
+    document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen();
+  });
+
+  root.addEventListener('mouseenter', () => {
+    players.forEach(p => { if (p.i !== i) p.vid.pause(); });
+    if (vid.paused) vid.play();
+  });
+
+  root.addEventListener('mouseleave', () => {
+    players.forEach(p => { if (p.i !== i) p.vid.play().catch(() => {}); });
+  });
+
+  vid.play().catch(() => {});
+
+  seek.addEventListener('click', e => {
+    if (!vid.duration) return;
+    const r = seek.getBoundingClientRect();
+    vid.currentTime = ((e.clientX - r.left) / r.width) * vid.duration;
+  });
+
+  setInterval(() => {
+    if (!vid.duration) return;
+    fill.style.width = (vid.currentTime / vid.duration * 100) + '%';
+    time.textContent = fmt(vid.currentTime) + ' / ' + fmt(vid.duration);
+  }, 500);
+});
+
+/* ---------- scroll reveal ---------- */
+(function(){
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+
+  function sr(el, delay) {
+    if (!el) return;
+    el.classList.add('sr');
+    if (delay) el.style.setProperty('--sr-d', delay + 'ms');
+    obs.observe(el);
+  }
+
+  // hero — staggered entrance
+  sr(document.querySelector('.hero .pill'),  0);
+  sr(document.querySelector('h1'),          100);
+  sr(document.querySelector('.hero p.sub'), 200);
+  sr(document.querySelector('.heroctas'),   300);
+
+  // software cards
+  document.querySelectorAll('.soft').forEach((el, i) => sr(el, i * 70));
+
+  // video section
+  sr(document.querySelector('.sectionhead'), 0);
+  document.querySelectorAll('.vcard').forEach((el, i) => sr(el, i * 90));
+
+  // apply gate + footer
+  sr(document.querySelector('.gate'),   0);
+  sr(document.querySelector('footer'),  0);
+})();
+
+/* ---------- confidence gate ---------- */
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScYiXZrOPSxiepH6osq1T6oXnLR79el5NxM6DULiv3RcsuUFA/viewform";
+const confidence = document.getElementById('confidence');
+const applybtn   = document.getElementById('applybtn');
+confidence.addEventListener('change', () => { applybtn.disabled = !confidence.checked; });
+applybtn.addEventListener('click', () => { window.open(GOOGLE_FORM_URL, '_blank'); });
+
+/* ---------- modal + 3-step wizard ---------- */
+const overlay   = document.getElementById('overlay');
+const form      = document.getElementById('appform');
+const msg       = document.getElementById('formmsg');
+const backbtn   = document.getElementById('backbtn');
+const nextbtn   = document.getElementById('nextbtn');
+const steplabel = document.getElementById('steplabel');
+const msuccess  = document.getElementById('msuccess');
+const modalfoot = document.getElementById('modalfoot');
+const stepNames = ['About you', 'Skills & fit', 'Commitment'];
+let step = 0;
+
+function openModal() {
+  overlay.classList.add('open');
+  document.body.classList.add('modal-open');
+  step = 0;
+  renderStep();
+  overlay.querySelector('input, textarea, button.mclose').focus();
+}
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  msg.className = 'formmsg';
+}
+// modal no longer used — form replaced with Google Form link
+document.getElementById('mclose').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+});
+
+function renderStep() {
+  document.querySelectorAll('.mstep').forEach(s =>
+    s.classList.toggle('active', +s.dataset.step === step));
+
+  // replay step-in animation on every navigation
+  const panel = document.querySelector(`.mstep[data-step="${step}"]`);
+  if (panel) {
+    panel.querySelectorAll('.q, fieldset').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // force reflow
+      el.style.animation = '';
+    });
+  }
+
+  document.querySelectorAll('.steps .seg').forEach(s => {
+    const n = +s.dataset.seg;
+    s.className = 'seg' + (n < step ? ' done' : n === step ? ' active' : '');
+  });
+  steplabel.textContent = `Step ${step + 1} of 3 · ${stepNames[step]}`;
+  backbtn.style.visibility = step === 0 ? 'hidden' : 'visible';
+  nextbtn.textContent = step === 2 ? 'Submit application' : 'Next';
+  msg.className = 'formmsg';
+  form.scrollTop = 0;
+}
+
+function showMsg(text, isError) {
+  msg.textContent = text;
+  msg.className = 'formmsg show' + (isError ? ' error' : '');
+}
+
+function validateStep(n) {
+  const panel = document.querySelector(`.mstep[data-step="${n}"]`);
+  for (const el of panel.querySelectorAll('input, textarea')) {
+    if (!el.checkValidity()) { el.reportValidity(); return false; }
+  }
+  if (n === 0) {
+    const country = panel.querySelector('select[name="country_code"]');
+    if (!country.value) { showMsg('Q3: please select your country code.', true); return false; }
+    if (!panel.querySelector('input[name="experience"]:checked')) {
+      showMsg('Q4: please select your years of experience.', true); return false;
+    }
+  }
+  if (n === 1) {
+    if (!panel.querySelectorAll('#software-group input:checked').length) {
+      showMsg('Q6: select at least one software you are proficient in.', true); return false;
+    }
+    const all = panel.querySelectorAll('#requirements-group input');
+    const chk = panel.querySelectorAll('#requirements-group input:checked');
+    if (chk.length !== all.length) {
+      showMsg('Q7: this role requires confidence in all listed tasks — please confirm every item.', true); return false;
+    }
+    if (!panel.querySelector('input[name="feedback"]:checked')) {
+      showMsg('Q8: please choose an answer.', true); return false;
+    }
+  }
+  if (n === 2) {
+    if (!panel.querySelector('input[name="trial"]:checked')) {
+      showMsg('Q10: please choose an answer.', true); return false;
+    }
+  }
+  return true;
+}
+
+backbtn.addEventListener('click', () => { if (step > 0) { step--; renderStep(); } });
+
+nextbtn.addEventListener('click', async () => {
+  if (!validateStep(step)) return;
+  if (step < 2) { step++; renderStep(); return; }
+
+  /* final submit */
+  if (!FORM_ENDPOINT) {
+    showMsg('Form is not connected yet. Site owner: set FORM_ENDPOINT at the top of the script to start receiving applications.', true);
+    return;
+  }
+  nextbtn.disabled = true;
+  nextbtn.textContent = 'Submitting…';
+  try {
+    await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',   // Apps Script blocks CORS reads; request still goes through
+      body: new FormData(form)
+    });
+    document.querySelectorAll('.mstep').forEach(s => s.classList.remove('active'));
+    msuccess.classList.add('show');
+    modalfoot.style.display = 'none';
+    steplabel.textContent = 'Done';
+    document.querySelectorAll('.steps .seg').forEach(s => s.className = 'seg done');
+    form.reset();
+  } catch (err) {
+    showMsg('Something went wrong sending your application. Please try again in a minute.', true);
+  } finally {
+    nextbtn.disabled = false;
+    nextbtn.textContent = 'Submit application';
+  }
+});
+</script>
+</body>
+</html>
