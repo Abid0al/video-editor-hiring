@@ -924,7 +924,15 @@ const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScYiXZrOPSxiep
 const confidence = document.getElementById('confidence');
 const applybtn   = document.getElementById('applybtn');
 confidence.addEventListener('change', () => { applybtn.disabled = !confidence.checked; });
-applybtn.addEventListener('click', () => { window.open(GOOGLE_FORM_URL, '_blank'); });
+applybtn.addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.href = GOOGLE_FORM_URL;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
 
 /* ---------- modal + 3-step wizard ---------- */
 const overlay   = document.getElementById('overlay');
