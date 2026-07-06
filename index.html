@@ -792,14 +792,22 @@ VIDEOS.forEach((v, i) => {
     ? `https://drive.google.com/file/d/${v.gdrive}/preview`
     : null;
 
+  const thumbSrc = v.gdrive
+    ? `https://drive.google.com/thumbnail?id=${v.gdrive}&sz=w1280`
+    : null;
+
   card.innerHTML = `
     <div class="player" id="player-${i}">
       ${embedSrc ? `
-        <!-- Cover shown until clicked — replaced by iframe on play -->
+        <!-- Thumbnail cover shown until clicked -->
         <div class="vcover" id="cover-${i}" style="
           position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-          background:var(--card);cursor:pointer;z-index:2;transition:background .25s;">
-          <div class="bigplay">
+          cursor:pointer;z-index:2;transition:opacity .25s;overflow:hidden;">
+          ${thumbSrc ? `<img src="${thumbSrc}" alt="${v.title}" style="
+            position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+            transition:transform .35s cubic-bezier(.4,0,.2,1);" id="thumb-${i}">` : ''}
+          <div style="position:absolute;inset:0;background:rgba(6,3,13,.45);"></div>
+          <div class="bigplay" style="position:relative;z-index:1;">
             <span class="ring">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </span>
@@ -826,31 +834,37 @@ VIDEOS.forEach((v, i) => {
   const player = document.getElementById('player-' + i);
   if (!cover) return;
 
-  // Hover: scale up play button ring slightly
+  const thumb = document.getElementById('thumb-' + i);
+
+  // Hover: zoom thumbnail + pulse ring
   cover.addEventListener('mouseenter', () => {
+    if (thumb) thumb.style.transform = 'scale(1.05)';
     cover.querySelector('.ring').style.transform = 'scale(1.12)';
     cover.querySelector('.ring').style.boxShadow = '0 0 48px rgba(124,92,252,.7)';
   });
   cover.addEventListener('mouseleave', () => {
+    if (thumb) thumb.style.transform = '';
     cover.querySelector('.ring').style.transform = '';
     cover.querySelector('.ring').style.boxShadow = '';
   });
 
   cover.addEventListener('click', () => {
-    // Unload any other playing iframe first
+    // Restore all other cards to their cover
     VIDEOS.forEach((_, j) => {
       if (j === i) return;
       const otherCover  = document.getElementById('cover-' + j);
       const otherPlayer = document.getElementById('player-' + j);
       if (!otherCover) return;
-      // Remove iframe and restore cover
       const existing = otherPlayer.querySelector('iframe');
       if (existing) existing.remove();
+      const bar = otherPlayer.querySelector('.gdrive-bar');
+      if (bar) bar.remove();
       otherCover.style.display = 'flex';
     });
 
-    // Load this iframe and hide cover
+    // Hide cover, inject iframe
     cover.style.display = 'none';
+
     const iframe = document.createElement('iframe');
     iframe.src = `https://drive.google.com/file/d/${v.gdrive}/preview`;
     iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
@@ -858,6 +872,15 @@ VIDEOS.forEach((v, i) => {
     iframe.allowFullscreen = true;
     iframe.title = v.title;
     player.appendChild(iframe);
+
+    // Overlay bar that covers the Google Drive header toolbar
+    const bar = document.createElement('div');
+    bar.className = 'gdrive-bar';
+    bar.style.cssText = `
+      position:absolute;top:0;left:0;right:0;height:46px;
+      background:var(--card);z-index:3;pointer-events:auto;
+    `;
+    player.appendChild(bar);
   });
 });
 
