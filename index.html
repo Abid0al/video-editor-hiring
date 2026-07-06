@@ -795,12 +795,16 @@ VIDEOS.forEach((v, i) => {
   card.innerHTML = `
     <div class="player" id="player-${i}">
       ${embedSrc ? `
-        <iframe
-          src="${embedSrc}"
-          style="position:absolute;inset:0;width:100%;height:100%;border:0;"
-          allow="autoplay; fullscreen"
-          allowfullscreen
-          title="${v.title}"></iframe>` : `
+        <!-- Cover shown until clicked — replaced by iframe on play -->
+        <div class="vcover" id="cover-${i}" style="
+          position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+          background:var(--card);cursor:pointer;z-index:2;transition:background .25s;">
+          <div class="bigplay">
+            <span class="ring">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </div>
+        </div>` : `
         <div class="vempty">
           <span class="ic"><svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg></span>
           <span>Reference video coming soon</span>
@@ -813,6 +817,48 @@ VIDEOS.forEach((v, i) => {
     </div>` : ''}
   `;
   vgrid.appendChild(card);
+});
+
+// Click-to-play: load iframe on click, unload others (one at a time)
+VIDEOS.forEach((v, i) => {
+  if (!v.gdrive) return;
+  const cover  = document.getElementById('cover-' + i);
+  const player = document.getElementById('player-' + i);
+  if (!cover) return;
+
+  // Hover: scale up play button ring slightly
+  cover.addEventListener('mouseenter', () => {
+    cover.querySelector('.ring').style.transform = 'scale(1.12)';
+    cover.querySelector('.ring').style.boxShadow = '0 0 48px rgba(124,92,252,.7)';
+  });
+  cover.addEventListener('mouseleave', () => {
+    cover.querySelector('.ring').style.transform = '';
+    cover.querySelector('.ring').style.boxShadow = '';
+  });
+
+  cover.addEventListener('click', () => {
+    // Unload any other playing iframe first
+    VIDEOS.forEach((_, j) => {
+      if (j === i) return;
+      const otherCover  = document.getElementById('cover-' + j);
+      const otherPlayer = document.getElementById('player-' + j);
+      if (!otherCover) return;
+      // Remove iframe and restore cover
+      const existing = otherPlayer.querySelector('iframe');
+      if (existing) existing.remove();
+      otherCover.style.display = 'flex';
+    });
+
+    // Load this iframe and hide cover
+    cover.style.display = 'none';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${v.gdrive}/preview`;
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+    iframe.allow = 'autoplay; fullscreen';
+    iframe.allowFullscreen = true;
+    iframe.title = v.title;
+    player.appendChild(iframe);
+  });
 });
 
 /* ---------- scroll reveal ---------- */
